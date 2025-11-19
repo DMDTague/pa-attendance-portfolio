@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Attendance Gap Report</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            line-height: 1.6;
+            color: #2c3e50;
+        }
+        
+        .report-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+        
+        /* Cover Page */
+        .cover {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+            color: white;
+            padding: 100px 60px;
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="2" height="2" fill="white" opacity="0.1"/></svg>');
+            background-size: 30px 30px;
+        }
+        
+        .cover-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .cover h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 64px;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .cover .subtitle {
+            font-size: 24px;
+            font-weight: 300;
+            margin-bottom: 50px;
+            opacity: 0.95;
+            max-width: 800px;
+        }
+        
+        .cover .meta {
+            display: flex;
+            gap: 40px;
+            margin-top: 60px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .cover .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .cover .meta-label {
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 11px;
+            margin-bottom: 5px;
+            opacity: 0.7;
+        }
+        
+        .abstract-box {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 50px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .abstract-box h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .abstract-box p {
+            font-size: 15px;
+            line-height: 1.8;
+        }
+        
+        /* Section Styles */
+        .section {
+            padding: 60px;
+            page-break-inside: avoid;
+        }
+        
+        .section:nth-child(even) {
+            background: #f8fafc;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #1e3c72;
+        }
+        
+        .chapter-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 72px;
+            font-weight: 900;
+            color: #7e22ce;
+            opacity: 0.2;
+            line-height: 1;
+        }
+        
+        .section-title {
+            flex: 1;
+        }
+        
+        .section-title h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+        
+        .section-title .subtitle {
+            font-size: 16px;
+            color: #64748b;
+            font-weight: 400;
+        }
+        
+        .executive-summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .executive-summary .section-header {
+            border-bottom-color: white;
+        }
+        
+        .executive-summary h2 {
+            color: white !important;
+        }
+        
+        .executive-summary p {
+            color: white;
+        }
+        
+        .executive-summary .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .key-findings {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .finding-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .finding-number {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+        
+        .finding-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .finding-text {
+            font-size: 14px;
+            line-height: 1.7;
+            opacity: 0.95;
+        }
+        
+        /* Stats Box */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(102,126,234,0.3);
+        }
+        
+        .stat-value {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Callout Box */
+        .callout {
+            background: #fef3c7;
+            border-left: 5px solid #f59e0b;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+        
+        .callout-title {
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .callout p {
+            color: #78350f;
+        }
+        
+        /* Data Visualization Placeholder */
+        .viz-placeholder {
+            /* Updated: now used as a clean container for final charts */
+            background: none;
+            border: none;
+            border-radius: 12px;
+            padding: 10px 0;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        /* Case Study */
+        .case-study {
+            background: #f1f5f9;
+            border-left: 5px solid #2563eb;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+        
+        .case-study h4 {
+            color: #1e40af;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .case-study-stats {
+            display: flex;
+            gap: 30px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        /* Key Takeaway */
+        .key-takeaway {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 12px;
+            margin: 40px 0;
+            font-weight: 600;
+            font-size: 18px;
+            box-shadow: 0 10px 30px rgba(16,185,129,0.3);
+        }
+        
+        .key-takeaway::before {
+            content: '💡 KEY TAKEAWAY';
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+        
+        /* Recommendations */
+        .recommendation-box {
+            background: white;
+            border: 2px solid #1e3c72;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .recommendation-box h3 {
+            color: #1e3c72;
+            font-size: 24px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .strategy-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+        }
+        
+        .bullet-list {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+        
+        .bullet-list li {
+            margin: 10px 0;
+            padding-left: 10px;
+        }
+        
+        /* Appendix */
+        .appendix {
+            background: #1e293b;
+            color: #e2e8f0;
+        }
+        
+        .appendix h2 {
+            color: white !important;
+        }
+        
+        .appendix .section-header {
+            border-bottom-color: #475569;
+        }
+        
+        .tech-block {
+            background: #0f172a;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            border-left: 3px solid #7e22ce;
+        }
+        
+        p {
+            margin: 15px 0;
+        }
+        
+        strong {
+            color: #1e3c72;
+            font-weight: 700;
+        }
+        
+        .executive-summary strong {
+            color: white;
+        }
+    
+        /* FIX: Improve readability of Executive Summary cards */
+        .executive-summary .finding-card {
+            background: rgba(255,255,255,0.9) !important;
+            color: #1e1e1e !important;
+        }
+        .executive-summary .finding-title,
+        .executive-summary .finding-number,
+        .executive-summary .finding-text {
+            color: #1e1e1e !important;
+        }
+
+    
+        /* FIX: Exec intro readability */
+        .executive-summary .exec-intro {
+            background: rgba(255,255,255,0.95);
+            color: #1e1e1e !important;
+            padding: 18px 22px;
+            border-radius: 14px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+    
+    
+        /* FIX: Exec recommendations readability */
+        .executive-summary .exec-recs {
+            background: rgba(255,255,255,0.95);
+            color: #1e1e1e;
+            padding: 18px 22px;
+            border-radius: 14px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            margin-top: 30px;
+        }
+        .executive-summary .exec-recs-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .executive-summary .exec-recs-body {
+            font-size: 14px;
+        }
+    
+    
+        /* FIX: Force exec summary headings & recs black */
+        .executive-summary .section-title h2,
+        .executive-summary .section-title .subtitle {
+            color: #000000 !important;
+        }
+        .executive-summary .exec-intro {
+            color: #000000 !important;
+        }
+        .executive-summary .exec-recs,
+        .executive-summary .exec-recs-title,
+        .executive-summary .exec-recs-body {
+            color: #000000 !important;
+        }
+    
+    </style>
+</head>
+<body>
+    <div class="report-container">
+        <!-- Cover Page -->
+        <div class="cover">
+            <div class="cover-content">
+                <h1>THE ATTENDANCE GAP</h1>
+                <div class="subtitle">A Longitudinal Analysis of Pennsylvania School Districts (2001–2009)</div>
+                
+                <div class="meta">
+                    <div class="meta-item">
+                        <div class="meta-label">Prepared For</div>
+                        <div>Pennsylvania Department of Education</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Date</div>
+                        <div>October 2009</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Pages</div>
+                        <div>24</div>
+                    </div>
+                </div>
+                
+                <div class="abstract-box">
+                    <h3>Abstract</h3>
+                    <p>Statewide aggregate data suggests Pennsylvania's school attendance is stable. This is an illusion. Beneath the surface of a 93–96% state average lies a system of localized crises and hidden declines. This report analyzes 4,907 district-year observations across 623 LEAs to expose the specific geography of lost instructional time. We find that nearly half of all lost days are generated by just 10% of districts, that volatility—not just low averages—defines the most struggling systems, and that without immediate intervention, 74% of districts are projected to miss the 95% attendance benchmark by 2012.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Executive Summary -->
+        <div class="section executive-summary">
+            <div class="section-header">
+                <div class="section-title">
+                    <h2>Executive Summary</h2>
+                    <div class="subtitle">Hidden Trajectories, Hyper-Concentration, and the Case for Targeted Intervention</div>
+                </div>
+            </div>
+            
+            <p class="exec-intro">Education policy often relies on snapshots—how a district performed in a single year. This cross-sectional view masks the critical dimension of time. By analyzing eight years of Child Accounting data (2001–2009), this report shifts the focus from 'status' to 'trajectory.'</p>
+            
+            <div class="key-findings">
+                <div class="finding-card">
+                    <div class="finding-number">1</div>
+                    <div class="finding-title">The Hidden Decline</div>
+                    <div class="finding-text">While the state average appears stable, 25% of districts (155 LEAs) are in active decline. Crucially, many of these are high-performing districts sliding unnoticed from 96% to 93%, eroding their safety margins without triggering traditional alarms.</div>
+                </div>
+                
+                <div class="finding-card">
+                    <div class="finding-number">2</div>
+                    <div class="finding-title">The Inequality of Lost Time</div>
+                    <div class="finding-text">Absenteeism is not a widespread, thin layer of dust; it is a pile of rocks concentrated in specific locations. A Pareto analysis reveals that the top 10% of districts account for 48.5% of all lost instructional days statewide.</div>
+                </div>
+                
+                <div class="finding-card">
+                    <div class="finding-number">3</div>
+                    <div class="finding-title">Behavioral Archetypes</div>
+                    <div class="finding-text">Districts fall into two distinct operational personas. 'Stable Mid-Performers' (~95% of LEAs) exhibit predictable patterns and require academic nudges. 'Volatile Low-Performers' (~5%) exhibit extreme year-to-year variance (volatility >1.5% SD).</div>
+                </div>
+                
+                <div class="finding-card">
+                    <div class="finding-number">4</div>
+                    <div class="finding-title">The 2012 Risk Forecast</div>
+                    <div class="finding-text">Using linear trend extrapolation, we project that without policy changes, only 26% of districts will be 'On Track' to meet a 95% attendance target by 2012. The remaining 74% are 'At Risk' or 'Unlikely' to meet the goal.</div>
+                </div>
+            </div>
+            
+            <div class="exec-recs">
+                <p class="exec-recs-title">Recommendations:</p>
+                <p class="exec-recs-body">We propose a shift from blanket equality to strategic equity. Resources should be disproportionately allocated to the 'Chronic 65' (Stabilization Grants) and 'Volatile' districts (Operational Support), while 'Decliners' require Early Warning monitoring. This targeted approach maximizes statewide impact while addressing the root causes of inequality.</p>
+            </div>
+        </div>
+
+        <!-- Chapter 1 -->
+        <div class="section">
+            <div class="section-header">
+                <div class="chapter-number">01</div>
+                <div class="section-title">
+                    <h2>District Trajectories</h2>
+                    <div class="subtitle">The Hidden Decline</div>
+                </div>
+            </div>
+            
+            <h3 style="color: #1e3c72; font-size: 24px; margin: 30px 0 20px;">The Stability Myth</h3>
+            
+            <p>From 2001 to 2009, Pennsylvania's statewide attendance rate hovered consistently between 93% and 96%. In many policy circles, this stability breeds complacency. It suggests that attendance is a 'solved problem' or at least a static one. However, when we decompose this average into 623 individual district trend lines, a different picture emerges: a system in motion, with significant churn beneath the surface.</p>
+            
+            <div class="callout">
+                <div class="callout-title">Methodology: Trend Slope Analysis</div>
+                <p>We calculated a linear regression slope for every district based on their attendance percentages over the 8-year period. This 'Trend Slope' represents the average percentage point change per year.</p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value">40%</div>
+                    <div class="stat-label">Strong Improvers<br>(250 Districts)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">35%</div>
+                    <div class="stat-label">Stable<br>(218 Districts)</div>
+                </div>
+                <div class="stat-box" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                    <div class="stat-value">25%</div>
+                    <div class="stat-label">Decliners<br>(155 Districts)</div>
+                </div>
+            </div>
+            
+            <div class="viz-placeholder">
+                <img src="Image.jpg" alt="District Attendance Trend vs Starting Attendance Rate (2001–2009)" style="max-width:100%; height:auto; border-radius:12px;">
+            </div>
+            
+            <h3 style="color: #1e3c72; font-size: 24px; margin: 30px 0 20px;">The Danger of the 'High-Performing Decliner'</h3>
+            
+            <p>The 'Decliner' cohort is particularly dangerous because it includes many districts that current accountability systems overlook. These are not the districts at 85% attendance; they are districts that started at 96% and have slid to 94%.</p>
+            
+            <div class="case-study">
+                <h4>Case Study: Carmichaels Area SD</h4>
+                <p>Carmichaels Area SD exemplifies the 'Stealth Decliner.'</p>
+                <div class="case-study-stats">
+                    <div><strong>2001 Attendance:</strong> 91.8%</div>
+                    <div><strong>2008 Attendance:</strong> 90.6%</div>
+                    <div><strong>Trend Slope:</strong> -0.18% per year</div>
+                </div>
+                <p>To a casual observer in any single year, Carmichaels looks 'average.' Yet, the negative momentum is consistent. A loss of nearly 0.2% per year compounds over a decade into a full percentage point drop—representing thousands of additional lost instructional hours.</p>
+            </div>
+            
+            <p>Conversely, improvement is possible from any baseline. First Philadelphia Charter School for Literacy began with a low baseline of 91.8% but maintained a positive slope of +0.28% per year, reaching 93.6% by the end of the period. This demonstrates that demographics are not destiny; operational focus on attendance yields results.</p>
+            
+            <div class="key-takeaway">
+                25% of the state is in active decline. We need an Early Warning System based on 'Slope,' not just 'Thresholds,' to catch high-performing districts before they fail.
+            </div>
+        </div>
+
+        <!-- Chapter 2 -->
+        <div class="section">
+            <div class="section-header">
+                <div class="chapter-number">02</div>
+                <div class="section-title">
+                    <h2>The Inequality of Lost Time</h2>
+                    <div class="subtitle">A Concentration Analysis</div>
+                </div>
+            </div>
+            
+            <h3 style="color: #1e3c72; font-size: 24px; margin: 30px 0 20px;">Defining the Metric: Lost Instructional Days</h3>
+            
+            <p>Percentage rates can be abstract. To understand the human cost of absenteeism, we calculated 'Lost Instructional Days'—the raw difference between Average Daily Membership (ADM) and Average Daily Attendance (ADA). This metric quantifies the exact volume of education missed.</p>
+            
+            <h3 style="color: #1e3c72; font-size: 24px; margin: 30px 0 20px;">The Pareto Principle in Action</h3>
+            
+            <p>When we rank Pennsylvania's 623 districts by total lost days, the distribution is not a bell curve; it is a steep Pareto distribution (Power Law).</p>
+            
+            <div class="viz-placeholder">
+                <img src="Image 1.jpg" alt="Concentration of Lost Instructional Time by District Decile (2001–2009)" style="max-width:100%; height:auto; border-radius:12px;">
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value">48.5%</div>
+                    <div class="stat-label">Top 10% of Districts<br>Lost Days Share</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">61.8%</div>
+                    <div class="stat-label">Top 20% of Districts<br>Lost Days Share</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">&lt;15%</div>
+                    <div class="stat-label">Bottom 50% of Districts<br>Lost Days Share</div>
+                </div>
+            </div>
+            
+            <div class="callout">
+                <div class="callout-title">The 'Chronic 65'</div>
+                <p>We identified a specific cohort of 65 districts that ranked in the top decile for lost days in at least three of the eight years analyzed. This group includes major urban centers (Philadelphia, Pittsburgh, Allentown) but also large suburban districts (Upper Darby, North Penn) and consolidated rural systems.</p>
+            </div>
+            
+            <h3 style="color: #1e3c72; font-size: 24px; margin: 30px 0 20px;">The Physics of Scale</h3>
+            
+            <p>Why do some high-performing districts appear in the Chronic 65? <strong>Scale.</strong> A district with 10,000 students and 95% attendance generates the same number of lost days (90,000/year) as a district with 1,000 students and 50% attendance.</p>
+            
+            <p>However, the 'Chronic 65' list is dominated by districts that have both scale AND lower attendance rates. For example, Philadelphia City SD alone contributes approximately 18% of the statewide total lost time.</p>
+            
+            <h3 style="color: #1e3c72; font-size: 24px; margin: 30px 0 20px;">Policy Implication: The Efficiency of Inequality</h3>
+            
+            <p>This concentration offers a strategic advantage. Because the problem is so localized, the solution can be equally targeted. If the state were to reduce absenteeism in just the 'Chronic 65' by 10%, it would have a greater impact on statewide learning time than reducing absenteeism in the bottom 500 districts by 50%.</p>
+            
+            <p>Equity requires that we direct funding to where the lost time is occurring. This is not just about urban vs. rural; it is about volume. The students in these 65 districts are missing nearly half of all the instruction missed in the Commonwealth.</p>
+            
+            <div class="key-takeaway">
+                Stop spreading resources like peanut butter. Direct 50% of all attendance intervention funding to the 'Chronic 65' districts.
+            </div>
+        </div>
+
+        <!-- Chapter 3 -->
+        <div class="section">
+            <div class="section-header">
+                <div class="chapter-number">03</div>
+                <div class="section-title">
+                    <h2>Behavioral Archetypes</h2>
+                    <div class="subtitle">Stability vs. Volatility</div>
+                </div>
+            </div>
+            
+            <h3 style="color: #1e3c72; font-size: 24px; margin: 30px 0 20px;">Beyond Averages: The Factor of Volatility</h3>
+            
+            <p>Two districts can have an identical average attendance rate of 92% over eight years.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+                <div class="case-study">
+                    <h4>District A: Steady</h4>
+                    <p style="font-family: 'Courier New', monospace;">92.1, 91.9, 92.0, 92.2...</p>
+                    <p style="margin-top: 15px;"><strong>Diagnosis:</strong> Culture problem</p>
+                </div>
+                <div class="case-study">
+                    <h4>District B: Volatile</h4>
+                    <p style="font-family: 'Courier New', monospace;">88.0, 96.0, 90.0, 94.0...</p>
+                    <p style="margin-top: 15px;"><strong>Diagnosis:</strong> Operational problem</p>
+                </div>
+            </div>
+            
+            <div class="callout">
+                <div class="callout-title">Clustering Analysis</div>
+                <p>We applied K-Means clustering to the dataset, utilizing three features: Mean Attendance, Trend Slope, and Volatility (Standard Deviation of year-over-year changes). The analysis identified two distinct archetypes with a Silhouette Score of 0.73 (indicating strong separation).</p>
+            </div>
+            
+            <div class="viz-placeholder">
+                <img src="Image 2.jpg" alt="District Attendance Archetypes by Mean Attendance and Volatility (2001–2009)" style="max-width:100%; height:auto; border-radius:12px;">
+            </div>
+            
+            <h3 style="color: #1e3c72; font-size: 24px; margin: 30px 0 20px;">Archetype 1: Stable Mid-Performers (The Majority)</h3>
+            
+            <div class="stats-grid" style="grid-template-columns: 1fr;">
+                <div class="stat-box">
+                    <div class="stat-value">~95%</div>
+                    <div class="stat-label">of all districts</div>
+                </div>
+            </div>
+            
+            <p><strong>Characteristics:</strong> Mean attendance 93–96%. Low volatility (&lt;0.5% SD). Predictable trends.</p>
+            <p><strong>Root Causes:</strong> Student disengagement, mild illness, family vacations, senioritis.</p>
+            <p><strong>Required Intervention:</strong> 'Nudges.' Academic engagement strategies, parent communication apps, minor incentives.</p>
+            
+            <h3 style="color: #1e3c72; font-size: 24px; margin: 30px 0 20px;">Archetype 2: Volatile Low-Performers (The Outliers)</h3>
+            
+            <div class="stats-grid" style="grid-template-columns: 1fr;">
+                <div class="stat-box" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                    <div class="stat-value">~5%</div>
+                    <div class="stat-label">of all districts (30-40 LEAs)</div>
+                </div>
+            </div>
+            
+            <p><strong>Characteristics:</strong> Lower mean attendance (&lt;90%) but extreme volatility (&gt;1.5% SD).</p>
+            <p><strong>Root Causes:</strong> Structural instability. Bus driver strikes, heating failures closing schools, massive staff turnover, data reporting errors, or severe community instability (e.g., large plant closures).</p>
+            <p><strong>Required Intervention:</strong> 'Triage.' Academic interventions will fail here. If a bus doesn't run, a 'nudge' text message is useless.</p>
+            
+            <h3 style="color: #1e3c72; font-size: 24px; margin: 30px 0 20px;">Policy Strategy: Stabilize Before Growth</h3>
+            
+            <p>For the Volatile Low-Performers, the Department of Education must suspend standard academic accountability regarding attendance. The focus must shift to Operational Stabilization. Grants should be restricted to:</p>
+            
+            <ul class="bullet-list">
+                <li>Securing reliable transportation contracts</li>
+                <li>Fixing facility issues that cause closures</li>
+                <li>Hiring permanent administrative staff to manage data</li>
+            </ul>
+            
+            <p>Only once volatility drops below 1.0% SD should these districts move to academic attendance interventions. Trying to improve student motivation in a chaotic operational environment is a waste of resources.</p>
+            
+            <div class="key-takeaway">
+                Different symptoms require different medicine. Operational Triage for the volatile 5%; Academic Nudges for the stable 95%.
+            </div>
+        </div>
+
+        <!-- Chapter 4 -->
+        <div class="section">
+            <div class="section-header">
+                <div class="chapter-number">04</div>
+                <div class="section-title">
+                    <h2>The Geographic Paradox</h2>
+                    <div class="subtitle">A County-Level Analysis</div>
+                </div>
+            </div>
+            
+            <h3 style="color: #1e3c72; font-size: 24px; margin: 30px 0 20px;">Testing the Regional Hypothesis</h3>
+            
+            <p>Education policy often operates at the county level (e.g., Intermediate Units). We hypothesized that counties might show 'convergence'—that low-performing districts within a county would catch up to their high-performing neighbors over a decade due to economic integration and shared services.</p>
+            
+            <p>We analyzed all 61 counties, plotting two trend lines for each:</p>
+            <ul class="bullet-list">
+                <li><strong>Trend in Mean Attendance</strong> (Is the county getting better?)</li>
+                <li><strong>Trend in Inequality</strong> (Is the gap between districts shrinking?)</li>
+            </ul>
+            
+            <div class="viz-placeholder">
+                <img src="Image 3.jpg" alt="Trends in Attendance by County: Mean vs Inequality (2001–2009)" style="max-width:100%; height:auto; border-radius:12px;">
+            </div>
+            
+            <h3 style="color: #1e3c72; font-size: 24px; margin: 30px 0 20px;">The Result: Stagnation</h3>
+            
+            <p>The analysis reveals a 'County Paradox.' There is virtually no systematic improvement or convergence at the county level.</p>
+            
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value">0</div>
+                    <div class="stat-label">Counties<br>Improving & Equalizing</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">0</div>
+                    <div class="stat-label">Counties<br>Declining & Polarizing</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">61</div>
+                    <div class="stat-label">Counties<br>Stable & Stable</div>
+                </div>
+            </div>
+            
+            <h3 style="color: #1e3c72; font-size: 24px; margin: 30px 0 20px;">Interpretation</h3>
+            
+            <p>This stagnation implies that geography is not destiny, nor is it the driver of change. An affluent suburban district and a struggling urban district can exist side-by-side in the same county for a decade without their attendance metrics influencing one another. The walls between districts are high.</p>
+            
+            <div class="callout">
+                <div class="callout-title">Policy Debunked</div>
+                <p>This debunks the idea of county-level block grants for attendance. Giving money to 'Montgomery County' to fix attendance is inefficient because Montgomery County doesn't have an attendance problem—Norristown and Pottstown do. Lower Merion does not.</p>
+            </div>
+            
+            <h3 style="color: #1e3c72; font-size: 24px; margin: 30px 0 20px;">Policy Implication</h3>
+            
+            <p>Interventions must bypass the county level and go directly to the LEA (Local Education Agency). While Intermediate Units (IUs) are valuable for service delivery, funding formulas based on county averages will mask the pockets of deep need. Data monitoring must remain granular.</p>
+            
+            <div class="key-takeaway">
+                The County is the wrong unit of analysis. Attendance dynamics are hyper-local. Funding must target specific LEAs, not regions.
+            </div>
+        </div>
+
+        <!-- Chapter 5 -->
+        <div class="section">
+            <div class="section-header">
+                <div class="chapter-number">05</div>
+                <div class="section-title">
+                    <h2>The 2012 Risk Forecast</h2>
+                    <div class="subtitle">Looking Forward to Prevent Failure</div>
+                </div>
+            </div>
+            
+            <p>Using the 8-year historical trend lines, we projected attendance trajectories three years into the future (to 2012). We set a benchmark of 95% attendance—a standard threshold for 'good' standing.</p>
+            
+            <h3 style="color: #1e3c72; font-size: 24px; margin: 30px 0 20px;">The Forecast Results</h3>
+            
+            <p>The results constitute a systemic alarm bell.</p>
+            
+            <div class="stats-grid">
+                <div class="stat-box" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                    <div class="stat-value">26%</div>
+                    <div class="stat-label">On Track<br>(162 Districts)</div>
+                </div>
+                <div class="stat-box" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                    <div class="stat-value">30%</div>
+                    <div class="stat-label">At Risk<br>(183 Districts)</div>
+                </div>
+                <div class="stat-box" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                    <div class="stat-value">44%</div>
+                    <div class="stat-label">Unlikely<br>(272 Districts)</div>
+                </div>
+            </div>
+            
+            <div class="callout">
+                <div class="callout-title">Forecast Definitions</div>
+                <ul class="bullet-list" style="margin-top: 10px;">
+                    <li><strong>On Track:</strong> Projected to be comfortably above 95%</li>
+                    <li><strong>At Risk:</strong> Projected to hover between 90% and 95% – within striking distance but drifting</li>
+                    <li><strong>Unlikely:</strong> Projected to be below 90% or declining so fast they cannot recover in three years</li>
+                </ul>
+            </div>
+            
+            <div class="viz-placeholder">
+                <img src="Image 4.jpg" alt="Attendance Forecast 3-Year Outlook to 2012" style="max-width:100%; height:auto; border-radius:12px;">
+            </div>
+            
+            <h3 style="color: #1e3c72; font-size: 24px; margin: 30px 0 20px;">The Cost of Reactive Policy</h3>
+            
+            <p>Traditionally, states intervene when a district fails. This forecast allows us to intervene <em>before</em> failure. The 183 'At Risk' districts are the low-hanging fruit of policy. They don't need massive structural overhaul; they need course correction. They are the 'Carmichaels Area SDs'—good districts sliding into mediocrity.</p>
+            
+            <p>The 'Unlikely' districts are the heavy lift. This cohort includes the massive urban centers. The forecast confirms that without a radical change in variables (funding, policy, operations), status quo operations will result in status quo failure. The trend lines are too flat or negative to expect a miracle.</p>
+            
+            <h3 style="color: #1e3c72; font-size: 24px; margin: 30px 0 20px;">The 'Attendance 95' Initiative</h3>
+            
+            <p>We recommend launching a proactive initiative based on these risk categories:</p>
+            
+            <div style="display: grid; gap: 20px; margin: 30px 0;">
+                <div class="recommendation-box">
+                    <h4 style="color: #ef4444; font-size: 18px; margin-bottom: 10px;">Unlikely Cohort</h4>
+                    <p>Mandatory 'Turnaround Plans' focused on the Chronic 65 strategies.</p>
+                </div>
+                <div class="recommendation-box">
+                    <h4 style="color: #f59e0b; font-size: 18px; margin-bottom: 10px;">At Risk Cohort</h4>
+                    <p>Technical assistance toolkits. State-provided data dashboards to help them see their own decline.</p>
+                </div>
+                <div class="recommendation-box">
+                    <h4 style="color: #10b981; font-size: 18px; margin-bottom: 10px;">On Track Cohort</h4>
+                    <p>Recognition rewards to maintain morale.</p>
+                </div>
+            </div>
+            
+            <div class="key-takeaway">
+                74% of the state is projected to miss the target. We have a 3-year window to alter these trajectories.
+            </div>
+        </div>
+
+        <!-- Chapter 6 -->
+        <div class="section">
+            <div class="section-header">
+                <div class="chapter-number">06</div>
+                <div class="section-title">
+                    <h2>Strategic Action Plan</h2>
+                    <div class="subtitle">A Three-Tiered Approach to Intervention</div>
+                </div>
+            </div>
+            
+            <p>Based on the analytical findings of this report, the following three-tiered strategy is recommended for the Pennsylvania Department of Education.</p>
+            
+            <div class="recommendation-box" style="margin-top: 30px;">
+                <h3>
+                    <div class="strategy-number">1</div>
+                    <span>TARGET THE 'CHRONIC 65'</span>
+                </h3>
+                <p style="font-style: italic; color: #64748b; margin-bottom: 15px;">The Equity Play</p>
+                
+                <p><strong>Rationale:</strong> 10% of districts drive 48.5% of lost time.</p>
+                
+                <p><strong>Action:</strong> Create a 'Chronic Absence Reduction Fund.'</p>
+                
+                <ul class="bullet-list">
+                    <li><strong>Allocation:</strong> 50% of all discretionary attendance budgets</li>
+                    <li><strong>Eligibility:</strong> Limited to the top decile of districts by total lost days</li>
+                    <li><strong>Use of Funds:</strong> Hiring Attendance Officers, Community Schools implementation (wraparound services), and direct family outreach personnel</li>
+                    <li><strong>Goal:</strong> Reduce statewide lost days by 20% by solely fixing the bottom 10%</li>
+                </ul>
+            </div>
+            
+            <div class="recommendation-box">
+                <h3>
+                    <div class="strategy-number">2</div>
+                    <span>STABILIZE THE VOLATILE</span>
+                </h3>
+                <p style="font-style: italic; color: #64748b; margin-bottom: 15px;">The Operational Play</p>
+                
+                <p><strong>Rationale:</strong> High volatility (&gt;1.5% SD) signals operational failure, not academic failure.</p>
+                
+                <p><strong>Action:</strong> Deploy 'District Stabilization Teams.'</p>
+                
+                <ul class="bullet-list">
+                    <li><strong>Target:</strong> The ~30 LEAs in Cluster 0 (Volatile Low-Performers)</li>
+                    <li><strong>Mandate:</strong> Suspend academic attendance goals for 2 years. Focus entirely on logistics</li>
+                    <li><strong>Interventions:</strong> Audit transportation routes, review facility maintenance schedules, audit data reporting software, stabilize administrative turnover</li>
+                    <li><strong>Goal:</strong> Reduce volatility to &lt;1.0% SD. Once stable, apply Strategy 3</li>
+                </ul>
+            </div>
+            
+            <div class="recommendation-box">
+                <h3>
+                    <div class="strategy-number">3</div>
+                    <span>EARLY WARNING FOR DECLINERS</span>
+                </h3>
+                <p style="font-style: italic; color: #64748b; margin-bottom: 15px;">The Prevention Play</p>
+                
+                <p><strong>Rationale:</strong> 155 districts are high-performing but declining.</p>
+                
+                <p><strong>Action:</strong> Automated Trend Alerts.</p>
+                
+                <ul class="bullet-list">
+                    <li><strong>Mechanism:</strong> Integrate trend-slope calculation into the PIMS (PA Information Management System) dashboard</li>
+                    <li><strong>Trigger:</strong> Any district with a 3-year trend slope &lt; -0.1%</li>
+                    <li><strong>Intervention:</strong> Automated letter from the Secretary of Education; offer of technical assistance; requirement to present a 'Course Correction Plan' to the local school board</li>
+                    <li><strong>Goal:</strong> Prevent the 'At Risk' cohort from becoming the 'Unlikely' cohort</li>
+                </ul>
+            </div>
+            
+            <h3 style="color: #1e3c72; font-size: 24px; margin: 40px 0 20px;">Conclusion</h3>
+            
+            <p>The data from 2001–2009 tells a story of a stable system masking deep localized fractures. By moving from average-based management to trajectory-based management, Pennsylvania can efficiently allocate resources to the students missing the most school, stabilizing the most chaotic districts, and arresting the decline of the middle class.</p>
+            
+            <div style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 40px; border-radius: 12px; margin: 40px 0; text-align: center;">
+                <p style="font-size: 24px; font-weight: 700; margin-bottom: 15px;">The time for action is now.</p>
+                <p style="font-size: 18px; opacity: 0.95;">Every percentage point of attendance represents thousands of hours of lost learning. This report provides the roadmap to reclaim that time.</p>
+            </div>
+        </div>
+
+        <!-- Appendix -->
+        <div class="section appendix">
+            <div class="section-header">
+                <div class="section-title">
+                    <h2>Technical Appendix</h2>
+                    <div class="subtitle">Methodology, Data Sources, and Statistical Parameters</div>
+                </div>
+            </div>
+            
+            <h3 style="color: white; font-size: 24px; margin: 30px 0 20px;">Data Sources</h3>
+            
+            <div class="tech-block">
+                Pennsylvania Department of Education Child Accounting Database<br>
+                Coverage: 2001-2002 through 2008-2009 academic years
+            </div>
+            
+            <h3 style="color: white; font-size: 24px; margin: 30px 0 20px;">Data Cleaning</h3>
+            
+            <ul class="bullet-list" style="color: #cbd5e1;">
+                <li>Merged 8 separate Excel files</li>
+                <li>Standardized column names (AUN, ADA, ADM)</li>
+                <li>Calculated numeric 'Year' from academic year strings</li>
+                <li>Removed LEAs with &lt;3 years of data for trend analysis</li>
+            </ul>
+            
+            <h3 style="color: white; font-size: 24px; margin: 30px 0 20px;">Metric Definitions</h3>
+            
+            <div class="tech-block">
+                <strong>Attendance Rate</strong> = Total ADA / Total ADM
+            </div>
+            
+            <div class="tech-block">
+                <strong>Lost Days</strong> = Total ADM - Total ADA
+            </div>
+            
+            <div class="tech-block">
+                <strong>Trend Slope</strong> = Coefficient of Year in a linear regression of Attendance Rate
+            </div>
+            
+            <div class="tech-block">
+                <strong>Volatility</strong> = Standard Deviation of year-over-year percentage point changes
+            </div>
+            
+            <h3 style="color: white; font-size: 24px; margin: 30px 0 20px;">Clustering Parameters</h3>
+            
+            <ul class="bullet-list" style="color: #cbd5e1;">
+                <li><strong>Algorithm:</strong> K-Means</li>
+                <li><strong>Features:</strong> Mean Attendance, Trend Slope, Volatility, Sec/Elem Ratios</li>
+                <li><strong>Scaling:</strong> StandardScaler (Z-score normalization)</li>
+                <li><strong>K=2</strong> chosen via Silhouette Score maximization (0.73)</li>
+            </ul>
+            
+            <h3 style="color: white; font-size: 24px; margin: 30px 0 20px;">Forecasting Model</h3>
+            
+            <ul class="bullet-list" style="color: #cbd5e1;">
+                <li>Per-LEA Ordinary Least Squares (OLS) regression</li>
+                <li>Projection window: 3 years (t+1, t+2, t+3)</li>
+                <li>Confidence intervals not calculated for summary stats, but recommended for individual district drill-downs</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
