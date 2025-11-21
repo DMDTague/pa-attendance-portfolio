@@ -689,12 +689,14 @@ export default function Portfolio() {
               ))}
             </div>
             <a
-              href="#"
-              className="hidden md:flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors"
-            >
-              <Github className="w-5 h-5" />
-              <span>Repo</span>
-            </a>
+  href="https://github.com/DMDTague/pa-attendance-portfolio"
+  target="_blank"
+  rel="noreferrer"
+  className="hidden md:flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors"
+>
+  <Github className="w-5 h-5" />
+  <span>Repo</span>
+</a>
           </div>
         </div>
       </nav>
@@ -1149,7 +1151,7 @@ export default function Portfolio() {
       </section>
 
 
-      <footer className="bg-slate-950 pt-12 pb-8 border-t border-white/5 text-center">
+            <footer className="bg-slate-950 pt-12 pb-8 border-t border-white/5 text-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center gap-2 mb-4">
             <BarChart3 className="w-6 h-6 text-indigo-500" />
@@ -1162,19 +1164,25 @@ export default function Portfolio() {
           </p>
           <div className="flex justify-center gap-8 mb-8">
             <a
-              href="#"
+              href="https://github.com/DMDTague/pa-attendance-portfolio"
+              target="_blank"
+              rel="noreferrer"
               className="text-slate-400 hover:text-white transition-colors font-medium"
             >
               GitHub
             </a>
             <a
-              href="#"
+              href="https://www.pa.gov/agencies/education/programs-and-services/schools/grants-and-funding/school-finances/reporting/child-accounting#accordion-0e33414de0-item-8fe4d7f630"
+              target="_blank"
+              rel="noreferrer"
               className="text-slate-400 hover:text-white transition-colors font-medium"
             >
               Data Source
             </a>
             <a
-              href="#"
+              href="https://www.linkedin.com/in/dylanmdtague/"
+              target="_blank"
+              rel="noreferrer"
               className="text-slate-400 hover:text-white transition-colors font-medium"
             >
               Contact
